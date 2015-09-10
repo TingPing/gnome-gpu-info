@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import locale
+import gettext
+
+import gi
+gi.require_version('GIRepository', '2.0')
+from gi.repository import Gio, GObject
+
+from gi.repository import GIRepository
+sys.path.insert(1, '@pyexecdir@')
+sys.path.insert(1, '@pythondir@')
+
+localedir = '@localedir@'
+pkgdatadir = '@pkgdatadir@'
+pkglibdir = '@pkglibdir@'
+srcdir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if os.path.exists(os.path.join(srcdir, 'configure.ac')):
+	print('Running locally...')
+	sys.path.insert(1, srcdir)
+	pkgdatadir = srcdir
+	#pkglibdir = os.path.join(srcdir, 'contrib', 'rg', '.libs') # FIXME: libtool nonsense
+
+GIRepository.Repository.prepend_search_path(pkglibdir)
+GIRepository.Repository.prepend_library_path(pkglibdir)
+
+gi.require_version('Rg', '0.1')
+from gi.repository import Rg
+GObject.type_ensure(Rg.Graph)
+
+resource = Gio.resource_load(os.path.join(pkgdatadir, 'ggi.gresource'))
+Gio.Resource._register(resource)
+
+locale.bindtextdomain('gnome-gpu-info', localedir)
+locale.textdomain('gnome-gpu-info')
+gettext.bindtextdomain('gnome-gpu-info', localedir)
+gettext.textdomain('gnome-gpu-info')
+
+if __name__ == "__main__":
+	from ggi import application
+	application.main()
