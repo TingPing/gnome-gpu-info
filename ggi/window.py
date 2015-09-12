@@ -16,7 +16,7 @@
 from gi.repository import Gtk, GObject, Gio, GLib
 from ._gi_composites import GtkTemplate
 
-from .gpu_intel import IntelGpu
+from .gpu import get_active_gpu
 from .gpu_graph import GpuUsageGraph
 
 @GtkTemplate(ui='resource:///org/gnome/gpu-info/ui/window.ui')
@@ -32,9 +32,10 @@ class GGIWindow(Gtk.ApplicationWindow):
 		super().__init__(*args, **kwargs)
 		self.init_template()
 
-		# TODO: detect gpus
-		gpu = IntelGpu()
-
-		usage_graph = GpuUsageGraph(gpu)
-		self.usage_box.pack_start(usage_graph, True, True, 0)
+		gpu = get_active_gpu()
+		if not gpu:
+			print('No Gpu found!')
+		else:
+			usage_graph = GpuUsageGraph(gpu)
+			self.usage_box.pack_start(usage_graph, True, True, 0)
 
