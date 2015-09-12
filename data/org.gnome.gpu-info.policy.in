@@ -7,7 +7,7 @@
   <vendor_url>http://www.gnome.org/</vendor_url>
   <icon_name>utilities-system-monitor</icon_name>
 
-  <action id="org.gnome.gnome-system-monitor.renice">
+  <action id="org.gnome.gpu-info.intel-top">
     <_description>Intel Gpu Top</_description>
     <_message>Privileges are required to monitor Intel GPU usage</_message>
     <defaults>
